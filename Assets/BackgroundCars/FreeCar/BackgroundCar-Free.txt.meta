@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7b975f7010a3cf54aa3eb2e6d302b179
+timeCreated: 1491229229
+licenseType: Store
+TextScriptImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 87053
+  packageName: Background Car - Free
+  packageVersion: 1.0
+  assetPath: Assets/BackgroundCars/FreeCar/BackgroundCar-Free.txt
+  uploadId: 171435
