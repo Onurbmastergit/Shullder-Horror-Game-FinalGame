@@ -20,7 +20,7 @@ public class Cellphone : MonoBehaviour
     public RawImage battery_10;
     public RawImage battery_0;
     public static float battery = 100;
-    public float time_limit = 1;
+    public float time_limit = 2;
     float time_decurred = 0;
     bool light_on = true;
     bool battery_minum = false;

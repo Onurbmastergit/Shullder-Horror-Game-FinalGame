@@ -7,6 +7,7 @@ TagManager:
   - Battery
   - Monster
   - Door
+  - Selection
   layers:
   - Default
   - TransparentFX
