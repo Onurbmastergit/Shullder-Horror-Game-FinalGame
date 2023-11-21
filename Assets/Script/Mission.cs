@@ -30,10 +30,10 @@ public class Mission : MonoBehaviour
     public static bool final_part = false;
 
     void Update(){ 
-        if(documents_take < 3){
+        if(documents_take < 3 && Display_Controls.inve_screen == false){
             monster.SetActive(false);
         }
-        if(documents_take > 3){
+        if(documents_take > 3 && Display_Controls.inve_screen == false){
             monster.SetActive(true);
         }
 

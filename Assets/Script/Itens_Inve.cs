@@ -5,6 +5,7 @@ using UnityEngine;
 public class Itens_Inve : MonoBehaviour
 {
     public bool selection_confirm = false;
+    public static bool item_confirm = false;
     public float speed = 10f;
     void Update()
     {
@@ -13,13 +14,15 @@ public class Itens_Inve : MonoBehaviour
       } 
     }
     void OnTriggerStay(Collider collider){
-        if(collider.gameObject.CompareTag("MainCamera")){
+        if(collider.gameObject.tag == "Invectory"){
             selection_confirm = true;
+            item_confirm = true;
         }
     }
     void OnTriggerExit(Collider collider){
-        if(collider.gameObject.CompareTag("MainCamera")){
+        if(collider.gameObject.CompareTag("Invectory")){
             selection_confirm = false;
+            item_confirm = false;
         }
     }
 }
