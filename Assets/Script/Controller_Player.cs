@@ -1,14 +1,11 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Controller_Player : MonoBehaviour
 {
     public AudioSource breathing;
-   public static bool tired_out = false;
-     public float walkingSpeed = 7.5f;
+    public static bool tired_out = false;
+    public float walkingSpeed = 7.5f;
     public float runningSpeed = 11.5f;
     public float jumpSpeed = 8.0f;
     public float gravity = 20.0f;
@@ -21,6 +18,7 @@ public class Controller_Player : MonoBehaviour
     CharacterController characterController;
     Vector3 moveDirection = Vector3.zero;
     float rotationX = 0;
+    float gyroRotationY = 0; // Rotation in Y-axis from gyroscope
 
     [HideInInspector]
     public bool canMove = true;
@@ -30,15 +28,25 @@ public class Controller_Player : MonoBehaviour
         characterController = GetComponent<CharacterController>();
 
         // Lock cursor
-        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-        UnityEngine.Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        // Check if gyro is available
+        if (SystemInfo.supportsGyroscope)
+        {
+            Input.gyro.enabled = true; // Enable the gyroscope
+        }
+        else
+        {
+            Debug.LogWarning("Gyroscope not supported on this device.");
+        }
     }
 
     void Update()
     {
         // We are grounded, so recalculate move direction based on axes
-        Vector3 forward = transform.TransformDirection(Vector3.forward);
-        Vector3 right = transform.TransformDirection(Vector3.right);
+        Vector3 forward = transform.forward;
+        Vector3 right = transform.right;
         // Press Left Shift to run
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
         float curSpeedX = canMove ? (isRunning ? runningSpeed : walkingSpeed) * Input.GetAxis("Vertical") : 0;
@@ -56,30 +64,30 @@ public class Controller_Player : MonoBehaviour
             moveDirection.y = movementDirectionY;
         }
 
-      if (isRunning)
-    {
-        if (!runSound.isPlaying)
+        if (isRunning)
         {
-            tired_out = true;
-            runSound.Play();
-            walkSound.Pause(); // Pausa o som de andar
+            if (!runSound.isPlaying)
+            {
+                tired_out = true;
+                runSound.Play();
+                walkSound.Pause(); // Pausa o som de andar
+            }
         }
-    }
-    else if (isMoving)
-    {
-        if (!walkSound.isPlaying)
+        else if (isMoving)
         {
-            walkSound.Play();
-            runSound.Pause(); // Pausa o som de correr
+            if (!walkSound.isPlaying)
+            {
+                walkSound.Play();
+                runSound.Pause(); // Pausa o som de correr
+            }
         }
-    }
-    else
-    {
-        // Se o jogador não está se movendo, pause ambos os sons
-        walkSound.Pause();
-        runSound.Pause();
-    }
-       
+        else
+        {
+            // Se o jogador não está se movendo, pause ambos os sons
+            walkSound.Pause();
+            runSound.Pause();
+        }
+
         // Apply gravity. Gravity is multiplied by deltaTime twice (once here, and once below
         // when the moveDirection is multiplied by deltaTime). This is because gravity should be applied
         // as an acceleration (ms^-2)
@@ -94,21 +102,32 @@ public class Controller_Player : MonoBehaviour
         // Player and Camera rotation
         if (canMove)
         {
-            rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
-            rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
-            playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
-            transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
+            // Rotate using gyroscope
+            if (SystemInfo.supportsGyroscope)
+            {
+                Quaternion attitude = Input.gyro.attitude;
+                attitude.x *= -1; // Invert X axis
+                attitude.y *= -1; // Invert Y axis
+                playerCamera.transform.localRotation = Quaternion.Euler(90, 0, 0) * attitude;
+
+                // Apply rotation from gyroscope to player's Y-axis
+                gyroRotationY = attitude.eulerAngles.y;
+            }
+
+            // Rotate the player to face the same direction as the camera
+            transform.rotation = Quaternion.Euler(0, gyroRotationY, 0);
         }
-        if(tired_out == true){
-            StartCoroutine(repeat());
+
+        if (tired_out)
+        {
+            StartCoroutine(RepeatBreathing());
         }
-    
-        
     }
-      IEnumerator repeat()
-  {
-    yield return new WaitForSeconds (3.0f);
+
+    IEnumerator RepeatBreathing()
+    {
+        yield return new WaitForSeconds(3.0f);
         breathing.Play();
         tired_out = false;
-  }
+    }
 }

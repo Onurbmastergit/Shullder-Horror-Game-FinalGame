@@ -7,6 +7,7 @@ using UnityEngine;
 public class Mission : MonoBehaviour
 {
    public TextMeshProUGUI textoTela;
+    public TextMeshProUGUI textoTela2;
    public GameObject document;
    public GameObject key;
    public GameObject monster;
@@ -39,6 +40,7 @@ public class Mission : MonoBehaviour
 
         if(enter_hospital == true){
             textoTela.text = "<b>Investigue o Hospício<b>";
+             textoTela2.text = "<b>Investigue o Hospício<b>";
         }
         if(enter_on == true){
             mission_take_documents = true;
@@ -52,6 +54,7 @@ public class Mission : MonoBehaviour
          if( mission_take_documents == true){
             key.SetActive(false);
             textoTela.text = "<b>Descubra a Historia do Hospício<b>\n"+documents_take+"/"+documents_objt;
+            textoTela2.text = "<b>Descubra a Historia do Hospício<b>\n"+documents_take+"/"+documents_objt;
             if(documents_take >= documents_objt){
                 mission_take_documents = false;
                 key.SetActive(true);
@@ -65,9 +68,12 @@ public class Mission : MonoBehaviour
 
         if(key_mission == true){
           textoTela.text = "<b>Ache a chave da sala do altar<b>\n"+key_founds+"/"+key_obj;
+          textoTela2.text = "<b>Ache a chave da sala do altar<b>\n"+key_founds+"/"+key_obj;
+          
         }
         if(final_part == true){
           textoTela.text = "<b>Ache a Boneca e saia do Hospício<b>";
+           textoTela2.text = "<b>Ache a Boneca e saia do Hospício<b>";
           EscapeCar.car_coll = true;
         }
 

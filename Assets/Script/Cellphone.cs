@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,7 +18,11 @@ public class Cellphone : MonoBehaviour
     public RawImage battery_50;
     public RawImage battery_10;
     public RawImage battery_0;
-    public static float battery = 100;
+    public RawImage battery_1002;
+    public RawImage battery_502;
+    public RawImage battery_102;
+    public RawImage battery_02;
+    public static float battery = 200;
     public float time_limit = 2;
     float time_decurred = 0;
     bool light_on = true;
@@ -45,23 +48,31 @@ public class Cellphone : MonoBehaviour
         } 
 
 
-            battery_100.GetComponent<RawImage>().enabled = false;   
-            battery_50.GetComponent<RawImage>().enabled = false;   
+            battery_100.GetComponent<RawImage>().enabled = false;
+            battery_1002.enabled = false;   
+            battery_50.GetComponent<RawImage>().enabled = false;
+            battery_502.enabled = false;   
             battery_10.GetComponent<RawImage>().enabled = false;
+            battery_102.enabled = false;
             battery_0.GetComponent<RawImage>().enabled = false;
+            battery_02.enabled = false;
 
         if(battery > 50){
             battery_100.GetComponent<RawImage>().enabled = true;
+            battery_1002.enabled = true;
         }
         if(battery <= 50 && battery > 10){
             battery_50.GetComponent<RawImage>().enabled = true;
+            battery_502.enabled = true;
         }
         if(battery <= 10 && battery > 0){
-            battery_10.GetComponent<RawImage>().enabled = true;   
+            battery_10.GetComponent<RawImage>().enabled = true;
+            battery_102.enabled = false;   
         }
         if(battery <= 0 ){
             //battery_10.GetComponent<RawImage>().enabled = false;    
             battery_0.GetComponent<RawImage>().enabled = true;
+            battery_02.enabled = true;
             battery_minum = true;
         }
         if(battery_0.GetComponent<RawImage>().enabled == true){
@@ -74,7 +85,7 @@ public class Cellphone : MonoBehaviour
          if(Input.GetKeyDown(KeyCode.Z)){
         cam.GetComponent<Camera>().fieldOfView = zoom_minum;
         } 
-        if(Input.GetKeyDown(KeyCode.F) && battery > 0){
+        if(Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.Joystick1Button3) && battery > 0){
         light_on = !light_on;
         flashlight_sound.Play();
         }

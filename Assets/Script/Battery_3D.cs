@@ -15,7 +15,7 @@ public class Battery_3D : MonoBehaviour
   {
     if(other.CompareTag("Player") && Cellphone.battery_max == false){
         pickup_battery.Play();
-        Cellphone.battery += 50;
+        Cellphone.battery += 70;
         Destroy(gameObject);
     }
   }
