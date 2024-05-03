@@ -24,9 +24,9 @@ public class Menu_Start : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.P)){
+        if(Input.GetKeyDown(KeyCode.P)||Input.GetKeyDown(KeyCode.JoystickButton0))
+        {
              cam.SetTrigger("Starts");
-             StartCoroutine(repeat());
              starts.SetActive(false);
              imagem.SetActive(false);
              ghost.SetActive(true);
@@ -34,13 +34,12 @@ public class Menu_Start : MonoBehaviour
              sound2.Stop();
              sound3.Stop();
              confirm_sound.Play();
+             Invoke("StartGame", 2);
         }
     }
 
-   IEnumerator repeat()
+  void StartGame()
   {
-    yield return new WaitForSeconds (2.0f);
-    SceneManager.LoadScene(scenename);
-        
+     SceneManager.LoadScene(scenename);
   }
 }

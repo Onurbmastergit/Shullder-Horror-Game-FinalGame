@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Shullder-Horror-Game-FinalGame.sln"
+    "dotnet.defaultSolution": "Shullder-Horror-Game.sln"
 }
